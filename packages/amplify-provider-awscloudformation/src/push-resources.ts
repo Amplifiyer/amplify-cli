@@ -463,6 +463,7 @@ export const run = async (context: $TSContext, resourceDefinition: $TSObject, re
     throw new AmplifyFault('DeploymentFault', {
       message: error.message,
       code: error.code,
+      details: error.details,
     }, error);
   }
 };

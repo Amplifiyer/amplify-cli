@@ -9,11 +9,13 @@ const regex = /^\s*at (?:((?:\[object object\])?[^\\/]+(?: \[as \S+\])?) )?\(?(.
 export class SerializableError {
   name: string;
   message: string;
+  details: string;
   code?: string;
   trace?: Trace[];
   constructor(error: Error) {
     this.name = error.name;
     this.message = error.message;
+    this.details = (error as $TSAny)?.details;
     this.code = (error as $TSAny)?.code;
     this.trace = extractStackTrace(error);
   }
@@ -77,4 +79,4 @@ type Trace = {
   file: string;
   lineNumber: string;
   columnNumber: string;
-}
+};
