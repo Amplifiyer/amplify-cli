@@ -165,36 +165,31 @@ export function addRestApiOldDx(cwd: string, settings: any) {
   }
 
   chain.wait('Restrict API access');
-  if (settings.restrictAccess) {
-    chain.sendConfirmYes();
+  chain.sendConfirmYes();
 
-    if (settings.hasUserPoolGroups) {
-      chain.wait('Restrict access by').sendCarriageReturn(); // Auth/Guest Users
-    }
-
-    chain.wait('Who should have access');
-
-    if (settings.allowGuestUsers) {
-      chain
-        .sendKeyDown()
-        .sendCarriageReturn() // Authenticated and Guest users
-        .wait('What permissions do you want to grant to Authenticated users')
-        .send('a') // CRUD permissions for authenticated users
-        .sendCarriageReturn()
-        .wait('What permissions do you want to grant to Guest users')
-        .send('a') // CRUD permissions for guest users
-        .sendCarriageReturn();
-    } else {
-      chain
-        .sendCarriageReturn() // Authenticated users only
-        .wait('What permissions do you want to grant to Authenticated users')
-        .send('a') // CRUD permissions
-        .sendCarriageReturn();
-    }
-  } else {
-    chain.sendConfirmNo(); // Do not restrict access
+  if (settings.hasUserPoolGroups) {
+    chain.wait('Restrict access by').sendCarriageReturn(); // Auth/Guest Users
   }
 
+  chain.wait('Who should have access');
+
+  if (settings.allowGuestUsers) {
+    chain
+      .sendKeyDown()
+      .sendCarriageReturn() // Authenticated and Guest users
+      .wait('What permissions do you want to grant to Authenticated users')
+      .send('a') // CRUD permissions for authenticated users
+      .sendCarriageReturn()
+      .wait('What permissions do you want to grant to Guest users')
+      .send('a') // CRUD permissions for guest users
+      .sendCarriageReturn();
+  } else {
+    chain
+      .sendCarriageReturn() // Authenticated users only
+      .wait('What permissions do you want to grant to Authenticated users')
+      .send('a') // CRUD permissions
+      .sendCarriageReturn();
+  }
   chain.wait('Do you want to add another path').sendConfirmNo().sendEof();
 
   return chain.runAsync();

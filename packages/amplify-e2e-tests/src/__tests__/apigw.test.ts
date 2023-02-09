@@ -45,7 +45,6 @@ describe('API Gateway e2e tests', () => {
     await addRestApi(projRoot, {
       apiName: secondRestApiName,
       isFirstRestApi: false,
-      restrictAccess: true,
       allowGuestUsers: true,
       hasUserPoolGroups: true,
       projectContainsFunctions: true,

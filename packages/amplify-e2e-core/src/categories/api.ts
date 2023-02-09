@@ -70,9 +70,7 @@ export function addApiWithoutSchema(cwd: string, opts: Partial<AddApiOptions & {
       .sendCarriageReturn()
       .wait('Do you want to edit the schema now?')
       .sendConfirmNo()
-      .wait(
-        '"amplify publish" will build all your local backend and frontend resources',
-      )
+      .wait('"amplify publish" will build all your local backend and frontend resources')
       .run((err: Error) => {
         if (!err) {
           resolve();
@@ -97,9 +95,7 @@ export function addApiWithOneModel(cwd: string, opts: Partial<AddApiOptions & { 
       .sendCarriageReturn()
       .wait('Do you want to edit the schema now?')
       .sendConfirmNo()
-      .wait(
-        '"amplify publish" will build all your local backend and frontend resources',
-      )
+      .wait('"amplify publish" will build all your local backend and frontend resources')
       .sendEof()
       .run((err: Error) => {
         if (!err) {
@@ -126,9 +122,7 @@ export function addApiWithThreeModels(cwd: string, opts: Partial<AddApiOptions &
       .sendCarriageReturn()
       .wait('Do you want to edit the schema now?')
       .sendConfirmNo()
-      .wait(
-        '"amplify publish" will build all your local backend and frontend resources',
-      )
+      .wait('"amplify publish" will build all your local backend and frontend resources')
       .sendEof()
       .run((err: Error) => {
         if (!err) {
@@ -160,9 +154,7 @@ export function addApiWithBlankSchema(cwd: string, opts: Partial<AddApiOptions &
       .sendCarriageReturn()
       .wait('Do you want to edit the schema now?')
       .sendLine('n')
-      .wait(
-        '"amplify publish" will build all your local backend and frontend resources',
-      )
+      .wait('"amplify publish" will build all your local backend and frontend resources')
       .sendEof()
       .run((err: Error) => {
         if (!err) {
@@ -199,9 +191,7 @@ export function addApiWithBlankSchemaAndConflictDetection(
       .sendCarriageReturn()
       .wait('Do you want to edit the schema now?')
       .sendLine('n')
-      .wait(
-        '"amplify publish" will build all your local backend and frontend resources',
-      )
+      .wait('"amplify publish" will build all your local backend and frontend resources')
       .run((err: Error) => {
         if (!err) {
           resolve();
@@ -456,7 +446,6 @@ export type RestAPISettings = {
   path?: string;
   isFirstRestApi?: boolean;
   existingLambda?: boolean;
-  restrictAccess?: boolean;
   allowGuestUsers?: boolean;
   projectContainsFunctions?: boolean;
   apiName?: string;
@@ -496,7 +485,10 @@ export function addRestApi(cwd: string, settings: RestAPISettings) {
         chooseLambdaFunctionForRestApi(chain, settings);
       }
       protectAPI(settings, chain);
-      chain.wait('Do you want to add another path').sendNo().sendEof();
+      chain
+        .wait('Do you want to add another path')
+        .sendNo()
+        .sendEof();
       return chain.runAsync();
     }
     chain.sendNo();
@@ -508,7 +500,10 @@ export function addRestApi(cwd: string, settings: RestAPISettings) {
   } else {
     chain.sendCarriageReturn();
   }
-  chain.wait('Provide a path').sendCarriageReturn().wait('Choose a lambda source');
+  chain
+    .wait('Provide a path')
+    .sendCarriageReturn()
+    .wait('Choose a lambda source');
 
   if (settings.existingLambda) {
     chain
@@ -521,41 +516,40 @@ export function addRestApi(cwd: string, settings: RestAPISettings) {
 
   protectAPI(settings, chain);
 
-  chain.wait('Do you want to add another path').sendNo().sendEof();
+  chain
+    .wait('Do you want to add another path')
+    .sendNo()
+    .sendEof();
 
   return chain.runAsync();
 }
 
 function protectAPI(settings: RestAPISettings, chain: ExecutionContext) {
   chain.wait('Restrict API access');
-  if (settings.restrictAccess) {
-    chain.sendYes();
+  chain.sendYes();
 
-    if (settings.hasUserPoolGroups) {
-      chain.wait('Restrict access by').sendCarriageReturn(); // Auth/Guest Users
-    }
+  if (settings.hasUserPoolGroups) {
+    chain.wait('Restrict access by').sendCarriageReturn(); // Auth/Guest Users
+  }
 
-    chain.wait('Who should have access');
+  chain.wait('Who should have access');
 
-    if (settings.allowGuestUsers) {
-      chain
-        .sendKeyDown()
-        .sendCarriageReturn() // Authenticated and Guest users
-        .wait('What permissions do you want to grant to Authenticated users')
-        .sendCtrlA() // CRUD permissions for authenticated users
-        .sendCarriageReturn()
-        .wait('What permissions do you want to grant to Guest users')
-        .sendCtrlA() // CRUD permissions for guest users
-        .sendCarriageReturn();
-    } else {
-      chain
-        .sendCarriageReturn() // Authenticated users only
-        .wait('What permissions do you want to grant to Authenticated users')
-        .sendCtrlA() // CRUD permissions
-        .sendCarriageReturn();
-    }
+  if (settings.allowGuestUsers) {
+    chain
+      .sendKeyDown()
+      .sendCarriageReturn() // Authenticated and Guest users
+      .wait('What permissions do you want to grant to Authenticated users')
+      .sendCtrlA() // CRUD permissions for authenticated users
+      .sendCarriageReturn()
+      .wait('What permissions do you want to grant to Guest users')
+      .sendCtrlA() // CRUD permissions for guest users
+      .sendCarriageReturn();
   } else {
-    chain.sendNo();
+    chain
+      .sendCarriageReturn() // Authenticated users only
+      .wait('What permissions do you want to grant to Authenticated users')
+      .sendCtrlA() // CRUD permissions
+      .sendCarriageReturn();
   }
 }
 
@@ -618,7 +612,11 @@ export function updateRestApi(cwd: string, settings: Partial<typeof updateRestAp
     default:
       throw new Error(`updateOperation ${completeSettings.updateOperation} is not implemented`);
   }
-  chain.wait('Restrict API access').sendNo().wait('Do you want to add another path').sendNo()
+  chain
+    .wait('Restrict API access')
+    .sendNo()
+    .wait('Do you want to add another path')
+    .sendNo()
     .wait('Successfully updated resource');
   return chain.runAsync();
 }
@@ -899,9 +897,9 @@ export async function validateRestApiMeta(projRoot: string, meta?: any) {
   expect(meta.function).toBeDefined();
   let seenAtLeastOneFunc = false;
   for (const key of Object.keys(meta.function)) {
-    const {
-      service, build, lastBuildTimeStamp, lastPackageTimeStamp, distZipFilename, lastPushTimeStamp, lastPushDirHash,
-    } = meta.function[key];
+    const { service, build, lastBuildTimeStamp, lastPackageTimeStamp, distZipFilename, lastPushTimeStamp, lastPushDirHash } = meta.function[
+      key
+    ];
     expect(service).toBe('Lambda');
     expect(build).toBeTruthy();
     expect(lastBuildTimeStamp).toBeDefined();

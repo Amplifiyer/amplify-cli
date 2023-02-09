@@ -62,19 +62,16 @@ describe('amplify add api (REST)', () => {
     await addFunction(projRoot, { functionTemplate: 'Hello World' }, 'nodejs');
     await addRestApi(projRoot, {
       existingLambda: true,
-      restrictAccess: true,
       allowGuestUsers: true,
     });
     await addRestApi(projRoot, {
       isFirstRestApi: false,
       existingLambda: true,
-      restrictAccess: true,
       allowGuestUsers: true,
     });
     await addRestApi(projRoot, {
       isFirstRestApi: false,
       existingLambda: true,
-      restrictAccess: true,
       allowGuestUsers: false,
     });
 
@@ -84,7 +81,6 @@ describe('amplify add api (REST)', () => {
         path: `/items${i}`,
         isFirstRestApi: false,
         existingLambda: true,
-        restrictAccess: true,
         allowGuestUsers: true,
       });
     }
