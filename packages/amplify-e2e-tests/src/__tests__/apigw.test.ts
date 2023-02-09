@@ -1,5 +1,4 @@
 import {
-  addAuthWithGroupsAndAdminAPI,
   addRestApi,
   amplifyOverrideApi,
   amplifyPushAuth,
@@ -10,6 +9,8 @@ import {
   get,
   getProjectMeta,
   initJSProjectWithProfile,
+  updateAuthAddAdminQueries,
+  updateAuthAddUserGroups,
 } from '@aws-amplify/amplify-e2e-core';
 import { JSONUtilities, pathManager, stateManager } from 'amplify-cli-core';
 import * as fs from 'fs-extra';
@@ -33,13 +34,15 @@ describe('API Gateway e2e tests', () => {
     deleteProjectDir(projRoot);
   });
 
-  it('adds multiple rest apis and pushes', async () => {
+  it.only('adds multiple rest apis and pushes', async () => {
     const firstRestApiName = `firstE2eRestApi${shortId}`;
     const secondRestApiName = `secondE2eRestApi${shortId}`;
 
     await addRestApi(projRoot, { apiName: firstRestApiName });
     await amplifyPushAuth(projRoot);
-    await addAuthWithGroupsAndAdminAPI(projRoot); // Groups: Admins, Users
+    //await addAuthWithGroupsAndAdminAPI(projRoot); // Groups: Admins, Users
+    await updateAuthAddUserGroups(projRoot, ['Admin', 'Users']);
+    await updateAuthAddAdminQueries(projRoot);
     await amplifyPushAuth(projRoot);
     await addRestApi(projRoot, { isFirstRestApi: false, path: '/', projectContainsFunctions: true }); // Add root path
     await addRestApi(projRoot, {
