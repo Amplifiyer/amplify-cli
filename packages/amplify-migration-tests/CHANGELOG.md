@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.3](https://github.com/aws-amplify/amplify-cli/compare/@aws-amplify/amplify-migration-tests@5.3.2...@aws-amplify/amplify-migration-tests@5.3.3) (2023-02-06)
+
+**Note:** Version bump only for package @aws-amplify/amplify-migration-tests
+
+
+
+
+
+## [5.3.2](https://github.com/aws-amplify/amplify-cli/compare/@aws-amplify/amplify-migration-tests@5.3.1...@aws-amplify/amplify-migration-tests@5.3.2) (2023-02-02)
+
+
+### Bug Fixes
+
+* automatic lint fixes ([#11636](https://github.com/aws-amplify/amplify-cli/issues/11636)) ([0e7f70b](https://github.com/aws-amplify/amplify-cli/commit/0e7f70befbe72d17dfb11f5fed1c8609a13d4a97))
+
+
+### Reverts
+
+* Revert "chore: fixing main to dev merge conflicts (#11696)" ([00fec46](https://github.com/aws-amplify/amplify-cli/commit/00fec4608096390b5ae2563b5c69453cd48bfa45)), closes [#11696](https://github.com/aws-amplify/amplify-cli/issues/11696)
+
+
+
+
+
+## [5.3.1](https://github.com/aws-amplify/amplify-cli/compare/@aws-amplify/amplify-migration-tests@5.3.0...@aws-amplify/amplify-migration-tests@5.3.1) (2023-01-17)
+
+
+### Bug Fixes
+
+*  cfn ambda outputs when forcePush flag is used ([fdcb20a](https://github.com/aws-amplify/amplify-cli/commit/fdcb20afffdb6b9d163d60c98f52da253ba04e77))
+* add to migration test list ([0521e96](https://github.com/aws-amplify/amplify-cli/commit/0521e960f995800a6be71457c21cf58525b2ea93))
+* address comments ([ab11b08](https://github.com/aws-amplify/amplify-cli/commit/ab11b08b105207786a49ea13a83f8226a8fb722f))
+
+
+
+
+
 # [5.3.0](https://github.com/aws-amplify/amplify-cli/compare/@aws-amplify/amplify-migration-tests@5.2.1...@aws-amplify/amplify-migration-tests@5.3.0) (2023-01-03)
 
 

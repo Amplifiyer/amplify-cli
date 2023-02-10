@@ -1,6 +1,6 @@
 import {
   amplifyPull,
-  amplifyPushAuth,
+  amplifyPushAuthV5V6,
   createNewProjectDir,
   deleteProject,
   deleteProjectDir,
@@ -17,16 +17,13 @@ describe('amplify add notifications', () => {
 
   beforeEach(async () => {
     projectRoot = await createNewProjectDir('notification-migration-4');
+    await versionCheck(process.cwd(), false, migrateFromVersion);
+    await versionCheck(process.cwd(), true, migrateToVersion);
   });
 
   afterEach(async () => {
     await deleteProject(projectRoot, undefined, true);
     deleteProjectDir(projectRoot);
-  });
-
-  beforeAll(async () => {
-    await versionCheck(process.cwd(), false, migrateFromVersion);
-    await versionCheck(process.cwd(), true, migrateToVersion);
   });
 
   it('should pull app if notifications added and removed with an older version', async () => {
@@ -38,7 +35,7 @@ describe('amplify add notifications', () => {
     expect(appId).toBeDefined();
 
     await addLegacySmsNotificationChannel(projectRoot, settings.resourceName);
-    await amplifyPushAuth(projectRoot, false);
+    await amplifyPushAuthV5V6(projectRoot);
 
     await removeLegacyAllNotificationChannel(projectRoot);
     const projectRootPull = await createNewProjectDir('removed-notifications-pull');

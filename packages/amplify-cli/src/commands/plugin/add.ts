@@ -3,8 +3,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as inquirer from 'inquirer';
 import { Context } from '../../domain/context';
-import { PluginInfo } from '../../domain/plugin-info';
-import { constants } from '../../domain/constants';
+import { PluginInfo, constants } from 'amplify-cli-core';
 import { addUserPluginPackage, addExcludedPluginPackage as addFromExcluded, confirmAndScan } from '../../plugin-manager';
 import { InquirerOption, EXPAND } from '../../domain/inquirer-helper';
 import { AddPluginError } from '../../domain/add-plugin-result';
@@ -52,20 +51,20 @@ async function resolvePluginPackagePath(context: Context, inputPath: string): Pr
   let result;
 
   const { pluginPlatform } = context;
-  let searchDirPaths = [constants.ParentDirectory, constants.LocalNodeModules, constants.GlobalNodeModules, process.cwd()];
+  let searchDirPaths = [constants.PARENT_DIRECTORY, constants.LOCAL_NODE_MODULES, constants.GLOBAL_NODE_MODULES, process.cwd()];
   searchDirPaths = searchDirPaths.filter(dirPath => !pluginPlatform.pluginDirectories.includes(dirPath.toString()));
   searchDirPaths = searchDirPaths.concat(pluginPlatform.pluginDirectories);
 
-  const candicatePluginDirPaths = searchDirPaths
+  const candidatePluginDirPaths = searchDirPaths
     .map(dirPath => path.normalize(path.join(normalizePluginDirectory(dirPath), inputPath)))
     .filter(pluginDirPath => fs.existsSync(pluginDirPath) && fs.statSync(pluginDirPath).isDirectory());
 
-  if (candicatePluginDirPaths.length === 0) {
+  if (candidatePluginDirPaths.length === 0) {
     context.print.error('Can not locate the plugin package.');
     result = await promptForPluginPath();
-  } else if (candicatePluginDirPaths.length === 1) {
+  } else if (candidatePluginDirPaths.length === 1) {
     context.print.green('Plugin package found.');
-    context.print.blue(candicatePluginDirPaths[0]);
+    context.print.blue(candidatePluginDirPaths[0]);
     const { confirmed } = await inquirer.prompt({
       type: 'confirm',
       name: 'confirmed',
@@ -73,12 +72,12 @@ async function resolvePluginPackagePath(context: Context, inputPath: string): Pr
       default: true,
     });
     if (confirmed) {
-      result = candicatePluginDirPaths[0];
+      result = candidatePluginDirPaths[0];
     }
-  } else if (candicatePluginDirPaths.length > 1) {
+  } else if (candidatePluginDirPaths.length > 1) {
     context.print.warning('Multiple plugins with the package name are found.');
 
-    const options = candicatePluginDirPaths.concat([CANCEL]);
+    const options = candidatePluginDirPaths.concat([CANCEL]);
     const answer = await inquirer.prompt({
       type: 'list',
       name: 'selection',

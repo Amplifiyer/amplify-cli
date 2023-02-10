@@ -1,6 +1,6 @@
 import {
   addFunction,
-  amplifyPushAuth,
+  amplifyPushAuthV5V6,
   amplifyPushLayer,
   amplifyStatus,
   createNewProjectDir,
@@ -28,14 +28,13 @@ describe('test lambda layer migration flow introduced in v5.0.0', () => {
   let projRoot: string;
   let versionToMigrateFrom: string;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
+    projRoot = await createNewProjectDir('functions');
+
     const version = { v: 'unintialized' };
     await versionCheck(process.cwd(), false, version);
     versionToMigrateFrom = version.v;
-  });
 
-  beforeEach(async () => {
-    projRoot = await createNewProjectDir('functions');
     if (versionToMigrateFrom === '4.28.2') {
       await initJSProjectWithProfileV4_28_2(projRoot, {}, false);
     } else if (versionToMigrateFrom === '4.52.0') {
@@ -72,7 +71,7 @@ describe('test lambda layer migration flow introduced in v5.0.0', () => {
     };
 
     await legacyAddLayer(projRoot, layerSettings);
-    await amplifyPushAuth(projRoot, false);
+    await amplifyPushAuthV5V6(projRoot);
     await amplifyStatus(projRoot, 'No Change', true);
     await updateLayer(projRoot, { ...layerSettings, dontChangePermissions: true, migrateLegacyLayer: true }, true);
     await amplifyStatus(projRoot, 'Update', true);
@@ -110,7 +109,7 @@ describe('test lambda layer migration flow introduced in v5.0.0', () => {
     };
 
     await legacyAddLayer(projRoot, layerSettings);
-    await amplifyPushAuth(projRoot, false);
+    await amplifyPushAuthV5V6(projRoot);
     legacyAddOptData(projRoot, layerName);
     await amplifyPushLayer(projRoot, { migrateLegacyLayer: true }, true);
     await removeLayerVersion(projRoot, { removeLegacyOnly: true }, [1], [1, 2], true);
@@ -127,7 +126,7 @@ describe('test lambda layer migration flow introduced in v5.0.0', () => {
     };
 
     await legacyAddLayer(projRoot, layerSettings);
-    await amplifyPushAuth(projRoot, false);
+    await amplifyPushAuthV5V6(projRoot);
     await updateLayer(
       projRoot,
       {
@@ -154,7 +153,7 @@ describe('test lambda layer migration flow introduced in v5.0.0', () => {
 
     await legacyAddLayer(projRoot, layerSettings);
     legacyAddOptData(projRoot, layerName);
-    await amplifyPushAuth(projRoot, false);
+    await amplifyPushAuthV5V6(projRoot);
     await updateLayer(projRoot, { ...layerSettings, dontChangePermissions: true, migrateLegacyLayer: true }, true);
     await amplifyPushLayer(projRoot, {}, true);
     legacyUpdateOptData(projRoot, layerName, 'update');

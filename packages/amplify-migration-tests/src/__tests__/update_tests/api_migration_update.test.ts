@@ -1,5 +1,6 @@
 import {
   amplifyPush,
+  amplifyPushLegacy,
   amplifyPushUpdate,
   createNewProjectDir,
   deleteProject,
@@ -26,17 +27,15 @@ import {
 describe('api migration update test', () => {
   let projRoot: string;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
+    projRoot = await createNewProjectDir('graphql-api');
     const migrateFromVersion = { v: 'unintialized' };
     const migrateToVersion = { v: 'unintialized' };
     await versionCheck(process.cwd(), false, migrateFromVersion);
     await versionCheck(process.cwd(), true, migrateToVersion);
     expect(migrateFromVersion.v).not.toEqual(migrateToVersion.v);
     expect(allowedVersionsToMigrateFrom).toContain(migrateFromVersion.v);
-  });
 
-  beforeEach(async () => {
-    projRoot = await createNewProjectDir('graphql-api');
     await initJSProjectWithProfileV4_52_0(projRoot, { name: 'apimigration' });
   });
 
@@ -55,7 +54,7 @@ describe('api migration update test', () => {
     const { projectName } = getProjectConfig(projRoot);
     await addApiWithoutSchemaOldDx(projRoot);
     updateApiSchema(projRoot, projectName, initialSchema);
-    await amplifyPush(projRoot);
+    await amplifyPushLegacy(projRoot);
 
     // update api and push with the CLI to be released (the codebase)
     updateApiSchema(projRoot, projectName, nextSchema);

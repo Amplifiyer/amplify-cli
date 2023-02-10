@@ -1,7 +1,7 @@
 import { $TSAny, $TSContext, AmplifyFault, AMPLIFY_SUPPORT_DOCS } from 'amplify-cli-core';
 import { loadLambdaConfig } from '../utils/lambda/load-lambda-config';
 import { BuildType, FunctionRuntimeLifecycleManager, BuildRequest } from 'amplify-function-plugin-interface';
-import { getInvoker, getBuilder } from 'amplify-category-function';
+import { getInvoker, getBuilder } from '@aws-amplify/amplify-category-function';
 import { timeConstrainedInvoker } from '../func';
 import { printer } from 'amplify-prompts';
 import { LambdaTrigger, LambdaTriggerConfig } from '../utils/lambda/find-lambda-triggers';
@@ -78,10 +78,10 @@ export const buildLambdaTrigger = async (
   runtimeManager: FunctionRuntimeLifecycleManager, 
   triggerConfig: Pick<LambdaTriggerConfig, 'runtime' | 'directory' | 'runtimePluginId'>
 ) => {
-  const runtimeRequirmentsCheck = await runtimeManager.checkDependencies(triggerConfig?.runtime);
-  if (!(runtimeRequirmentsCheck?.hasRequiredDependencies)) {
+  const runtimeRequirementsCheck = await runtimeManager.checkDependencies(triggerConfig?.runtime);
+  if (!(runtimeRequirementsCheck?.hasRequiredDependencies)) {
     const runtimeRequirementsError = 'Required dependencies to build the lambda trigger are missing';
-    printer.error(runtimeRequirmentsCheck?.errorMessage || runtimeRequirementsError);
+    printer.error(runtimeRequirementsCheck?.errorMessage || runtimeRequirementsError);
     throw new AmplifyFault('MockProcessFault', {
       message: runtimeRequirementsError,
       link: AMPLIFY_SUPPORT_DOCS.CLI_GRAPHQL_TROUBLESHOOTING.url

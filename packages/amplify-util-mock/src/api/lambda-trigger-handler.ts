@@ -1,7 +1,7 @@
 import { $TSContext, AmplifyFault, AMPLIFY_SUPPORT_DOCS } from 'amplify-cli-core';
 import { DynamoDBStreams, Endpoint } from 'aws-sdk';
 import { invokeTrigger } from './lambda-invoke';
-import { isMockable } from 'amplify-category-function';
+import { isMockable } from '@aws-amplify/amplify-category-function';
 import { printer } from 'amplify-prompts';
 import { LambdaTrigger } from '../utils/lambda/find-lambda-triggers';
 
@@ -51,7 +51,7 @@ export const ddbLambdaTriggerHandler = async (
 
     const streams = getDDBStreamsClient(localDynamoDBEndpoint);
 
-    await pollDDBStreamAndInvokeLamba(context, streamArn, streams, lambdaTrigger);
+    await pollDDBStreamAndInvokeLambda(context, streamArn, streams, lambdaTrigger);
 }
 
 /**
@@ -137,7 +137,7 @@ export const getStreamRecords = async (
  * Checks if there are any new DDB records available 
  * via stream to be processed in the trigger
  */
-export const pollDDBStreamAndInvokeLamba = async(context: $TSContext, streamArn: string, streams: DynamoDBStreams, lambdaTrigger: LambdaTrigger) => {
+export const pollDDBStreamAndInvokeLambda = async(context: $TSContext, streamArn: string, streams: DynamoDBStreams, lambdaTrigger: LambdaTrigger) => {
     let shardIterator = await getLatestShardIterator(streamArn, streams);
     while (shardIterator) {
         await getStreamRecords(shardIterator, streamArn, streams).then( async (result) => {

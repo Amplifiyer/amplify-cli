@@ -1,7 +1,7 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable no-unused-vars */
 const triggerFlow = require('../../lib/extensions/amplify-helpers/trigger-flow');
-const func = require('amplify-category-function');
+const func = require('@aws-amplify/amplify-category-function');
 const inquirer = require('inquirer');
 const fs = require('fs');
 const fsExtra = require('fs-extra');
@@ -246,7 +246,7 @@ describe('TriggerFlow:  ', () => {
     });
   });
 
-  describe('When deleteting deselected triggers...', () => {
+  describe('When deleting deselected triggers...', () => {
     const currentTriggers = ['arya'];
     let previousTriggers;
     let deleteSpy;
